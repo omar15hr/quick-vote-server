@@ -1,3 +1,4 @@
+const PersonList = require("./personList");
 
 
 class Sockets {
@@ -6,19 +7,19 @@ class Sockets {
 
         this.io = io;
 
+        this.personList = new PersonList();
+
         this.socketEvents();
     }
 
     socketEvents() {
         // On connection
         this.io.on('connection', ( socket ) => {
+        
+            console.log('Cliente conectado');
 
-            // Escuchar evento: mensaje-to-server
-            socket.on('mensaje-to-server', ( data ) => {
-                console.log( data );
-                
-                this.io.emit('mensaje-from-server', data );
-            });
+            // Emitir todos los usuarios conectados
+            socket.emit('current-people', this.personList.getPeople() );
             
         
         });
